@@ -30,7 +30,7 @@ namespace PizzaBox.Client
             //Console.WriteLine($"{++index} - Admin");
 
 
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
 
             switch (input)
             {
@@ -70,7 +70,8 @@ namespace PizzaBox.Client
             Console.WriteLine($"{++index} - Make a new order");
             Console.WriteLine($"{++index} - View past orders");
             Console.WriteLine($"{++index} - Exit PizzaBox");
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
 
             switch (input)
             {
@@ -80,7 +81,7 @@ namespace PizzaBox.Client
                 case 2:
                     SelectPastOrdersMenu();
                     break;
-                default:
+                case 3:
                     break;
             }
 
@@ -95,7 +96,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"{++index} - {customer.Name} made an Order with {StoreController.GetStoreById(order.StoreId).Name} on {order.Date}");
             }
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
             int orderid = orders[--input].OrderId;
             ReviewPastOrder(orderid);
         }
@@ -109,7 +111,8 @@ namespace PizzaBox.Client
             Console.WriteLine($"{++index} - View another past order");
             Console.WriteLine($"{++index} - Return to order menu");
 
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
             switch (input)
             {
                 case 1:
@@ -133,7 +136,7 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"{++index} - {item.Name}");
             }
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
 
             store = stores[--input];
             order = OrderController.addOrder(customer.CustomerId, store.StoreId, DateTime.Now);
@@ -146,9 +149,10 @@ namespace PizzaBox.Client
             Console.WriteLine("");
             Console.WriteLine("What would you like to do to your order");
             Console.WriteLine($"{++index} - Would you like to add a pizza to order?");
-            Console.WriteLine($"{++index} - Would you like to remove a pizza from order?");
+            Console.WriteLine($"{++index} - Would you like to view/remove a pizza from order?");
             Console.WriteLine($"{++index} - Would you like to Order checkout?");
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
             switch (input)
             {
                 case 1:
@@ -186,9 +190,20 @@ namespace PizzaBox.Client
                 }
                 Console.WriteLine("");
             }
-            int delete = InputInt("Select a pizza to remove");
-            OrderPizzaController.DeleteOrderPizzaById(orderpizzas[--delete].OrderPizzaId);
-            AddPizzaMenu();
+            Console.WriteLine($"{++index} - Go back");
+            int delete = InputIntInRange("Select a pizza to remove", index, 1, "Please select a number from the store menu!");
+
+            if (delete == index)
+            {
+                AddPizzaMenu();
+            }
+            else
+            {
+                OrderPizzaController.DeleteOrderPizzaById(orderpizzas[--delete].OrderPizzaId);
+                AddPizzaMenu();
+            }
+
+
         }
 
         public void SelectPizzaMenu()
@@ -199,14 +214,11 @@ namespace PizzaBox.Client
             List<Pizza> pizzas = PizzaController.GetPizzas();
             foreach (var item in pizzas)
             {
-                if (item.Name != "CustomPizza")
-                {
-                    Console.WriteLine($"{++index} - {SizeController.GetSizeById(item.SizeId).Name} - {item.Name} ");
-                }
-
+                Console.WriteLine($"{++index} - {SizeController.GetSizeById(item.SizeId).Name} - {item.Name} ");
             }
             Console.WriteLine($"{++index} - CustomPizza");
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
 
             if (input == index)
             {
@@ -215,8 +227,10 @@ namespace PizzaBox.Client
             }
             else
             {
-                int Quantity = InputInt("Input Quantity");
+                int Quantity = InputIntInRange("Input Quantity", 50, 1, "Please select a quantity from 1 to 50");
+
                 OrderPizzaController.addOrderPizza(order.OrderId, pizzas[--input].PizzaId, Quantity);
+                Console.WriteLine($"Your pizza was added to order.");
                 AddPizzaMenu();
             }
         }
@@ -231,7 +245,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"{++index} - {size.Name} - {size.Price} ");
             }
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
             var sizeId = sizes[--input].SizeId;
 
             SelectCrust(sizeId);
@@ -247,7 +262,8 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine($"{++index} - {crust.Name} - {crust.Price} ");
             }
-            int input = InputInt("Select Option");
+            int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
+
             var crustId = input;
             custompizza = PizzaController.addCustomPizza(sizeId, crustId);
 
@@ -271,15 +287,16 @@ namespace PizzaBox.Client
             {
                 Console.WriteLine("Select your toppings (at least two, no more than five)");
 
-                int input = InputInt("Select Topping");
+                int input = InputIntInRange("Select Topping", index, 1, "Please select a number from the store menu!");
 
 
-                if (input == index && toppingset.Count > 2)
+                if (input == index && toppingset.Count > 1)
                 {
                     finished = true;
                 }
                 else if (toppingset.Count == 5)
                 {
+                    Console.WriteLine("Max Toppings added. Pizza added to order.");
                     finished = true;
                 }
                 else if (input > 0 && input < index)
@@ -300,8 +317,10 @@ namespace PizzaBox.Client
                 PizzaToppingController.addPizzaTopping(item.ToppingId, custompizza.PizzaId);
             }
 
-            int Quantity = InputInt("Input Quantity");
+            int Quantity = InputIntInRange("Input Quantity", 50, 1, "Please select a quantity from 1 to 50");
+
             OrderPizzaController.addOrderPizza(order.OrderId, custompizza.PizzaId, Quantity);
+            Console.WriteLine($"Your pizza was added to order.");
             AddPizzaMenu();
         }
 
@@ -322,7 +341,7 @@ namespace PizzaBox.Client
             {
                 decimal pizzaPrice = 0;
                 Pizza pizza = PizzaController.GetPizzaById(item.PizzaId);
-                Console.WriteLine($"Qty: {item.Quantity} * {pizza.Name}");
+                Console.WriteLine($"Item: {pizza.Name}");
                 Size size = SizeController.GetSizeById(pizza.SizeId);
                 pizzaPrice += size.Price;
                 Console.WriteLine($"{size.Name} - {size.Price}");
@@ -338,12 +357,12 @@ namespace PizzaBox.Client
                     pizzaPrice += top.Price;
                 }
                 totalPrice += pizzaPrice * item.Quantity;
+                Console.WriteLine($"Qty: {item.Quantity} Price: {pizzaPrice} Amount: {pizzaPrice * item.Quantity}");
                 Console.WriteLine("");
             }
-            Console.WriteLine($"Total Price: {totalPrice}");
+            Console.WriteLine($"Total Order Price: {totalPrice}");
 
         }
-
 
         private static int InputInt(string promt)
         {
@@ -364,6 +383,17 @@ namespace PizzaBox.Client
             } while (!success);
 
             return -1;
+        }
+
+        private static int InputIntInRange(string promt, int max, int min, string promt2)
+        {
+            int input = InputInt(promt);
+            while (input < min || input > max)
+            {
+                input = InputInt(promt2);
+            }
+
+            return input;
         }
 
     }

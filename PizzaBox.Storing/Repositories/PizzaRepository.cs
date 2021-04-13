@@ -40,7 +40,7 @@ namespace PizzaBox.Storing.Repositories
         public List<Pizza> GetAllItems()
         {
             var pizzas = context.Pizzas;
-            return pizzas.OrderBy(o => o.SizeId).ToList();
+            return pizzas.Where(x => x.Name != "CustomPizza").OrderBy(o => o.SizeId).ToList();
         }
 
         public void Update(Pizza pizza)
