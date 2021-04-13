@@ -9,13 +9,13 @@ namespace PizzaBox.Client.Controller
     {
         static SizeRepository repository = Dependencies.CreateSizeRepository();
 
-        public static List<PizzaBox.Storing.Entities.Size> GetSizes()
+        public static List<PizzaBox.Domain.Models.Size> GetSizes()
         {
             var Sizes = repository.GetAllItems();
             return Sizes;
         }
 
-        public static PizzaBox.Storing.Entities.Size GetSizeById(int id)
+        public static PizzaBox.Domain.Models.Size GetSizeById(int id)
         {
             return repository.GetById(id);
         }

@@ -9,7 +9,8 @@ namespace PizzaBox.Storing.Mappers
             {
                 OrderId = obj.OrderId,
                 CustomerId = obj.CustomerId,
-                StoreId = obj.StoreId
+                StoreId = obj.StoreId,
+                Date = obj.Date
             };
         }
 
@@ -19,7 +20,8 @@ namespace PizzaBox.Storing.Mappers
             {
                 OrderId = obj.OrderId,
                 CustomerId = obj.CustomerId,
-                StoreId = obj.StoreId
+                StoreId = obj.StoreId,
+                Date = obj.Date
             };
         }
     }

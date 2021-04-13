@@ -10,13 +10,13 @@ namespace PizzaBox.Client.Controller
     {
         static CrustRepository repository = Dependencies.CreateCrustRepository();
 
-        public static List<PizzaBox.Storing.Entities.Crust> GetCrusts()
+        public static List<PizzaBox.Domain.Models.Crust> GetCrusts()
         {
             var Crusts = repository.GetAllItems();
             return Crusts;
         }
 
-        public static PizzaBox.Storing.Entities.Crust GetCrustById(int id)
+        public static PizzaBox.Domain.Models.Crust GetCrustById(int id)
         {
             return repository.GetById(id);
         }

@@ -9,7 +9,7 @@ namespace PizzaBox.Client.Controller
     {
         static PizzaToppingRepository repository = Dependencies.CreatePizzaToppingRepository();
 
-        public static List<PizzaBox.Storing.Entities.PizzaTopping> GetPizzaToppingsByPizzaID(int id)
+        public static List<PizzaBox.Domain.Models.PizzaTopping> GetPizzaToppingsByPizzaID(int id)
         {
 
             return repository.GetAllItemsByPizzaId(id);
@@ -17,17 +17,17 @@ namespace PizzaBox.Client.Controller
 
 
 
-        public static PizzaBox.Storing.Entities.PizzaTopping addPizzaTopping(int _toppingID, int _pizzaID)
+        public static PizzaBox.Domain.Models.PizzaTopping addPizzaTopping(int _toppingID, int _pizzaID)
         {
 
-            PizzaBox.Storing.Entities.PizzaTopping PizzaTopping = new PizzaBox.Storing.Entities.PizzaTopping
+            PizzaBox.Domain.Models.PizzaTopping PizzaTopping = new PizzaBox.Domain.Models.PizzaTopping
             {
                 PizzaId = _pizzaID,
                 ToppingId = _toppingID
             };
 
             repository.Add(PizzaTopping);
-            return PizzaTopping;
+            return repository.GetRecentlyAdded();
         }
     }
 }

@@ -3,47 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
 using PizzaBox.Storing.Entities;
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class PizzaRepository : IRepository<PizzaBox.Storing.Entities.Pizza>
+    public class PizzaRepository : IRepository<PizzaBox.Domain.Models.Pizza>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.pizza, PizzaBoxLib.Models.pizza> mapper = new pizzaMapper();
+        private readonly IMapper<Entities.Pizza, Domain.Models.Pizza> mapper = new PizzaMapper();
 
         public PizzaRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(Pizza pizza)
+        public void Add(Domain.Models.Pizza pizza)
         {
-            context.Add(pizza);
+            context.Add(mapper.Map(pizza));
             context.SaveChanges();
         }
 
-        public void Delete(Pizza pizza)
+        public void Delete(Domain.Models.Pizza pizza)
         {
-            context.Remove(pizza);
+            context.Remove(mapper.Map(pizza));
             context.SaveChanges();
         }
 
-        List<Pizza> IRepository<Pizza>.GetAllItems()
+        List<Domain.Models.Pizza> IRepository<Domain.Models.Pizza>.GetAllItems()
         {
             var pizzas = context.Pizzas;
-            return pizzas.ToList();
+            return pizzas.Select(mapper.Map).ToList();
         }
 
-        public List<Pizza> GetAllItems()
+        public Domain.Models.Pizza GetRecentlyAdded()
+        {
+            int maxIndex = context.Pizzas.Max(x => x.PizzaId);
+            return mapper.Map(context.Pizzas.Where(x => x.PizzaId == maxIndex).FirstOrDefault());
+        }
+
+        public List<Domain.Models.Pizza> GetAllItems()
         {
             var pizzas = context.Pizzas;
-            return pizzas.Where(x => x.Name != "CustomPizza").OrderBy(o => o.SizeId).ToList();
+            return pizzas.Where(x => x.Name != "CustomPizza").OrderBy(o => o.SizeId).Select(mapper.Map).ToList();
         }
 
-        public void Update(Pizza pizza)
+        public void Update(Domain.Models.Pizza pizza)
         {
             var PizzaToUpdate = context.Pizzas.Where(x => x.PizzaId == pizza.PizzaId).FirstOrDefault();
             if (PizzaToUpdate != null)
@@ -61,32 +68,16 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        public Pizza GetByID(int id)
+        public Domain.Models.Pizza GetByID(int id)
         {
-            return context.Pizzas.Where(x => x.PizzaId == id).FirstOrDefault();
+            var pizza = context.Pizzas.Where(x => x.PizzaId == id).FirstOrDefault();
+            return mapper.Map(pizza);
         }
 
-        public Pizza GetByName(string name)
+        Domain.Models.Pizza IRepository<Domain.Models.Pizza>.GetById(int id)
         {
-            throw new NotImplementedException();
+            var pizza = context.Pizzas.Where(x => x.PizzaId == id).FirstOrDefault();
+            return mapper.Map(pizza);
         }
-
-        public void DeleteByName(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Pizza GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-
-        // public pizza GetByName(string name)
-        // {
-        //     var pizza = context.pizzas.Where(x => x.Name == name).FirstOrDefault();
-        //     return pizza;
-        // }
-
     }
 }

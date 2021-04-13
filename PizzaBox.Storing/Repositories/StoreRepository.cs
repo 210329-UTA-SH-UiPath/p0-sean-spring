@@ -3,42 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
 using PizzaBox.Storing.Entities;
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class StoreRepository : IRepository<PizzaBox.Storing.Entities.Store>
+    public class StoreRepository : IRepository<PizzaBox.Domain.Models.Store>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.Store, PizzaBoxLib.Models.Store> mapper = new StoreMapper();
+        private readonly IMapper<Entities.Store, PizzaBox.Domain.Models.Store> mapper = new StoreMapper();
 
         public StoreRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(Store store)
+        public void Add(Domain.Models.Store store)
         {
-            context.Add(store);
+            context.Add(mapper.Map(store));
             context.SaveChanges();
         }
 
-        public void Delete(Store store)
+        public void Delete(Domain.Models.Store store)
         {
-            context.Remove(store);
+            context.Remove(mapper.Map(store));
             context.SaveChanges();
         }
 
-        public void DeleteByName(string name)
-        {
-            var store = context.Stores.Where(x => x.Name == name).FirstOrDefault();
-            context.Remove(store);
-            context.SaveChanges();
-        }
-
-        public void Update(Store store)
+        public void Update(Domain.Models.Store store)
         {
             var StoreToUpdate = context.Stores.Where(x => x.StoreId == store.StoreId).FirstOrDefault();
             if (StoreToUpdate != null)
@@ -54,27 +48,22 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        List<Store> IRepository<Store>.GetAllItems()
+        List<Domain.Models.Store> IRepository<Domain.Models.Store>.GetAllItems()
         {
             var stores = context.Stores;
-            return stores.ToList();
+            return stores.Select(mapper.Map).ToList();
         }
 
-        public List<Store> GetAllItems()
+        public List<Domain.Models.Store> GetAllItems()
         {
             var stores = context.Stores;
-            return stores.ToList();
+            return stores.Select(mapper.Map).ToList();
         }
 
-        public Store GetByName(string name)
+        public Domain.Models.Store GetById(int id)
         {
-            var Store = context.Stores.Where(x => x.Name == name).FirstOrDefault();
-            return Store;
-        }
-
-        public Store GetById(int id)
-        {
-            return context.Stores.Where(x => x.StoreId == id).FirstOrDefault();
+            var store = context.Stores.Where(x => x.StoreId == id).FirstOrDefault();
+            return mapper.Map(store);
         }
 
     }

@@ -9,13 +9,13 @@ namespace PizzaBox.Client.Controller
     {
         static StoreRepository repository = Dependencies.CreateStoreRepository();
 
-        public static List<PizzaBox.Storing.Entities.Store> GetStores()
+        public static List<PizzaBox.Domain.Models.Store> GetStores()
         {
             var stores = repository.GetAllItems();
             return stores;
         }
 
-        public static PizzaBox.Storing.Entities.Store GetStoreById(int id)
+        public static PizzaBox.Domain.Models.Store GetStoreById(int id)
         {
             return repository.GetById(id);
         }

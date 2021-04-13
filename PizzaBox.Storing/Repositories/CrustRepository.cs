@@ -3,43 +3,35 @@ using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
 using PizzaBox.Storing.Entities;
-
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class CrustRepository : IRepository<PizzaBox.Storing.Entities.Crust>
+    public class CrustRepository : IRepository<PizzaBox.Domain.Models.Crust>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.Crust, PizzaBoxLib.Models.Crust> mapper = new CrustMapper();
+        private readonly CrustMapper mapper = new CrustMapper();
 
         public CrustRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(Crust Crust)
+        public void Add(Domain.Models.Crust Crust)
         {
-            context.Add(Crust);
+            context.Add(mapper.Map(Crust));
             context.SaveChanges();
         }
 
-        public void Delete(Crust Crust)
+        public void Delete(Domain.Models.Crust Crust)
         {
-            context.Remove(Crust);
+            context.Remove(mapper.Map(Crust));
             context.SaveChanges();
         }
-
-        public void DeleteByName(string name)
-        {
-            var Crust = context.Crusts.Where(x => x.Name == name).FirstOrDefault();
-            context.Remove(Crust);
-            context.SaveChanges();
-        }
-
-        public void Update(Crust Crust)
+        public void Update(Domain.Models.Crust Crust)
         {
             var CrustToUpdate = context.Crusts.Where(x => x.CrustId == Crust.CrustId).FirstOrDefault();
             if (CrustToUpdate != null)
@@ -55,28 +47,28 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        List<Crust> IRepository<Crust>.GetAllItems()
+        List<Domain.Models.Crust> IRepository<Domain.Models.Crust>.GetAllItems()
         {
             var Crusts = context.Crusts;
-            return Crusts.ToList();
+            return Crusts.Select(mapper.Map).ToList();
         }
 
-        public List<Crust> GetAllItems()
+        public List<Domain.Models.Crust> GetAllItems()
         {
             var Crusts = context.Crusts;
-            return Crusts.ToList();
+            return Crusts.Select(mapper.Map).ToList();
         }
 
-        public Crust GetByName(string name)
+        public Domain.Models.Crust GetByName(string name)
         {
             var Crust = context.Crusts.Where(x => x.Name == name).FirstOrDefault();
-            return Crust;
+            return mapper.Map(Crust);
         }
 
-        public Crust GetById(int id)
+        public Domain.Models.Crust GetById(int id)
         {
             var Crust = context.Crusts.Where(x => x.CrustId == id).FirstOrDefault();
-            return Crust;
+            return mapper.Map(Crust);
         }
 
     }

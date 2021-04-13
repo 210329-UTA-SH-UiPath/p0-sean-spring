@@ -9,13 +9,13 @@ namespace PizzaBox.Client.Controller
     {
         static ToppingRepository repository = Dependencies.CreateToppingRepository();
 
-        public static List<PizzaBox.Storing.Entities.Topping> GetToppings()
+        public static List<PizzaBox.Domain.Models.Topping> GetToppings()
         {
             var Toppings = repository.GetAllItems();
             return Toppings;
         }
 
-        public static PizzaBox.Storing.Entities.Topping GetToppingById(int id)
+        public static PizzaBox.Domain.Models.Topping GetToppingById(int id)
         {
             return repository.GetById(id);
         }

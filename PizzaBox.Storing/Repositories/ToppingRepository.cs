@@ -3,42 +3,36 @@ using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
 using PizzaBox.Storing.Entities;
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class ToppingRepository : IRepository<PizzaBox.Storing.Entities.Topping>
+    public class ToppingRepository : IRepository<PizzaBox.Domain.Models.Topping>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.Topping, PizzaBoxLib.Models.Topping> mapper = new ToppingMapper();
+        private readonly IMapper<Entities.Topping, PizzaBox.Domain.Models.Topping> mapper = new ToppingMapper();
 
         public ToppingRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(Topping Topping)
+        public void Add(Domain.Models.Topping Topping)
         {
-            context.Add(Topping);
+            context.Add(mapper.Map(Topping));
             context.SaveChanges();
         }
 
-        public void Delete(Topping Topping)
+        public void Delete(Domain.Models.Topping Topping)
         {
-            context.Remove(Topping);
+            context.Remove(mapper.Map(Topping));
             context.SaveChanges();
         }
 
-        public void DeleteByName(string name)
-        {
-            var Topping = context.Toppings.Where(x => x.Name == name).FirstOrDefault();
-            context.Remove(Topping);
-            context.SaveChanges();
-        }
-
-        public void Update(Topping Topping)
+        public void Update(Domain.Models.Topping Topping)
         {
             var ToppingToUpdate = context.Toppings.Where(x => x.ToppingId == Topping.ToppingId).FirstOrDefault();
             if (ToppingToUpdate != null)
@@ -54,28 +48,22 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        List<Topping> IRepository<Topping>.GetAllItems()
+        List<Domain.Models.Topping> IRepository<Domain.Models.Topping>.GetAllItems()
         {
             var Toppings = context.Toppings;
-            return Toppings.ToList();
+            return Toppings.Select(mapper.Map).ToList();
         }
 
-        public List<Topping> GetAllItems()
+        public List<Domain.Models.Topping> GetAllItems()
         {
             var Toppings = context.Toppings;
-            return Toppings.ToList();
+            return Toppings.Select(mapper.Map).ToList();
         }
 
-        public Topping GetByName(string name)
-        {
-            var Topping = context.Toppings.Where(x => x.Name == name).FirstOrDefault();
-            return Topping;
-        }
-
-        public Topping GetById(int id)
+        public Domain.Models.Topping GetById(int id)
         {
             var Topping = context.Toppings.Where(x => x.ToppingId == id).FirstOrDefault();
-            return Topping;
+            return mapper.Map(Topping);
         }
 
     }

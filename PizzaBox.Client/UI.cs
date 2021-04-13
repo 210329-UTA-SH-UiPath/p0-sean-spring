@@ -3,7 +3,7 @@ using PizzaBox.Domain;
 using System.Collections.Generic;
 using PizzaBox.Storing;
 using PizzaBox.Client.Controller;
-using PizzaBox.Storing.Entities;
+using PizzaBox.Domain.Models;
 
 namespace PizzaBox.Client
 {
@@ -58,6 +58,7 @@ namespace PizzaBox.Client
             Console.WriteLine("");
             Console.WriteLine("Welcome back to PizzaBox!");
             customer = CustomerController.GetCustomerByName();
+
             OrderMenu();
         }
 

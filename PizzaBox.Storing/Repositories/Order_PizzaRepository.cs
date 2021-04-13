@@ -2,33 +2,40 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
-using PizzaBox.Storing.Entities;
+using PizzaBox.Domain.Models;
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class OrderPizzaRepository : IRepository<PizzaBox.Storing.Entities.OrderPizza>
+    public class OrderPizzaRepository : IRepository<PizzaBox.Domain.Models.OrderPizza>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.OrderPizza, PizzaBoxLib.Models.OrderPizza> mapper = new OrderPizzaMapper();
+        private readonly IMapper<Entities.OrderPizza, PizzaBox.Domain.Models.OrderPizza> mapper = new OrderPizzaMapper();
 
         public OrderPizzaRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(OrderPizza OrderPizza)
+        public void Add(Domain.Models.OrderPizza OrderPizza)
         {
-            context.Add(OrderPizza);
+            context.Add(mapper.Map(OrderPizza));
             context.SaveChanges();
         }
 
-        public void Delete(OrderPizza OrderPizza)
+        public void Delete(Domain.Models.OrderPizza OrderPizza)
         {
-            context.Remove(OrderPizza);
+            context.Remove(mapper.Map(OrderPizza));
             context.SaveChanges();
+        }
+
+        public Domain.Models.OrderPizza GetRecentlyAdded()
+        {
+            int maxIndex = context.OrderPizzas.Max(x => x.OrderPizzaId);
+            return mapper.Map(context.OrderPizzas.Where(x => x.OrderPizzaId == maxIndex).FirstOrDefault());
         }
 
         public void DeleteByOrderPizzaId(int id)
@@ -38,7 +45,7 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        public void Update(OrderPizza OrderPizza)
+        public void Update(Domain.Models.OrderPizza OrderPizza)
         {
             var OrderPizzaToUpdate = context.OrderPizzas.Where(x => x.OrderPizzaId == OrderPizza.OrderPizzaId).FirstOrDefault();
             if (OrderPizzaToUpdate != null)
@@ -54,21 +61,21 @@ namespace PizzaBox.Storing.Repositories
             context.SaveChanges();
         }
 
-        List<OrderPizza> IRepository<OrderPizza>.GetAllItems()
+        List<Domain.Models.OrderPizza> IRepository<Domain.Models.OrderPizza>.GetAllItems()
         {
             var OrderPizzas = context.OrderPizzas;
-            return OrderPizzas.ToList();
+            return OrderPizzas.Select(mapper.Map).ToList();
         }
 
-        public List<OrderPizza> GetAllItems()
+        public List<Domain.Models.OrderPizza> GetAllItems()
         {
             var OrderPizzas = context.OrderPizzas;
-            return OrderPizzas.ToList();
+            return OrderPizzas.Select(mapper.Map).ToList();
         }
 
-        public List<OrderPizza> GetAllItemsByOrderId(int id)
+        public List<Domain.Models.OrderPizza> GetAllItemsByOrderId(int id)
         {
-            return context.OrderPizzas.Where(x => x.OrderId == id).ToList();
+            return context.OrderPizzas.Where(x => x.OrderId == id).Select(mapper.Map).ToList();
         }
 
         public OrderPizza GetById(int id)

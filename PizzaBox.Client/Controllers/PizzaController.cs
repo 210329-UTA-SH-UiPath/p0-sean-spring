@@ -9,23 +9,23 @@ namespace PizzaBox.Client.Controller
     {
         static PizzaRepository repository = Dependencies.CreatePizzaRepository();
 
-        public static List<PizzaBox.Storing.Entities.Pizza> GetPizzas()
+        public static List<PizzaBox.Domain.Models.Pizza> GetPizzas()
         {
             var Pizzas = repository.GetAllItems();
             return Pizzas;
         }
 
-        public static PizzaBox.Storing.Entities.Pizza GetPizzaById(int id)
+        public static PizzaBox.Domain.Models.Pizza GetPizzaById(int id)
         {
 
             return repository.GetByID(id);
         }
 
 
-        public static PizzaBox.Storing.Entities.Pizza addCustomPizza(int _sizeID, int _crustID)
+        public static PizzaBox.Domain.Models.Pizza addCustomPizza(int _sizeID, int _crustID)
         {
 
-            PizzaBox.Storing.Entities.Pizza Pizza = new PizzaBox.Storing.Entities.Pizza
+            PizzaBox.Domain.Models.Pizza Pizza = new PizzaBox.Domain.Models.Pizza
             {
                 Name = "CustomPizza",
                 SizeId = _sizeID,
@@ -33,8 +33,7 @@ namespace PizzaBox.Client.Controller
             };
 
             repository.Add(Pizza);
-            return Pizza;
+            return repository.GetRecentlyAdded();
         }
-
     }
 }

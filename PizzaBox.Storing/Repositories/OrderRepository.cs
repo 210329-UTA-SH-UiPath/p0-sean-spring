@@ -3,32 +3,39 @@ using System.Collections.Generic;
 using System.Linq;
 using PizzaBox.Domain;
 using PizzaBox.Storing.Entities;
+using PizzaBox.Storing.Mappers;
 
 namespace PizzaBox.Storing.Repositories
 {
 
-    public class OrderRepository : IRepository<PizzaBox.Storing.Entities.Order>
+    public class OrderRepository : IRepository<PizzaBox.Domain.Models.Order>
     {
 
         private readonly Entities.pizzaappContext context;
 
-        //private readonly IMapper<Entities.Order, PizzaBoxLib.Models.Order> mapper = new OrderMapper();
+        private readonly IMapper<Entities.Order, PizzaBox.Domain.Models.Order> mapper = new OrderMapper();
 
         public OrderRepository(Entities.pizzaappContext context)
         {
             this.context = context;
         }
 
-        public void Add(Order order)
+        public void Add(Domain.Models.Order order)
         {
-            context.Add(order);
+            context.Add(mapper.Map(order));
             context.SaveChanges();
         }
 
-        public void Delete(Order order)
+        public void Delete(Domain.Models.Order order)
         {
-            context.Remove(order);
+            context.Remove(mapper.Map(order));
             context.SaveChanges();
+        }
+
+        public Domain.Models.Order GetRecentlyAdded()
+        {
+            int maxIndex = context.Orders.Max(x => x.OrderId);
+            return mapper.Map(context.Orders.Where(x => x.OrderId == maxIndex).FirstOrDefault());
         }
 
 
@@ -48,46 +55,32 @@ namespace PizzaBox.Storing.Repositories
         //     context.SaveChanges();
         // }
 
-        List<Order> IRepository<Order>.GetAllItems()
+        List<Domain.Models.Order> IRepository<Domain.Models.Order>.GetAllItems()
         {
             var orders = context.Orders;
-            return orders.ToList();
+            return orders.Select(mapper.Map).ToList();
         }
 
-        public List<Order> GetAllItems()
+        public List<Domain.Models.Order> GetAllItems()
         {
             var orders = context.Orders;
-            return orders.ToList();
+            return orders.Select(mapper.Map).ToList();
         }
 
-        public List<Order> GetAllOrdersByCustomerId(int id)
+        public List<Domain.Models.Order> GetAllOrdersByCustomerId(int id)
         {
 
-            return context.Orders.Where(x => x.CustomerId == id).ToList();
+            return context.Orders.Where(x => x.CustomerId == id).Select(mapper.Map).ToList();
         }
 
-        public void Update(Order obj)
+        public void Update(Domain.Models.Order obj)
         {
             throw new NotImplementedException();
         }
 
-        public Order GetByName(string name)
+        public Domain.Models.Order GetById(int id)
         {
-            throw new NotImplementedException();
+            return mapper.Map(context.Orders.Where(x => x.OrderId == id).FirstOrDefault());
         }
-
-        public Order GetById(int id)
-        {
-            return context.Orders.Where(x => x.OrderId == id).FirstOrDefault();
-        }
-
-
-
-        // public Order GetByName(string name)
-        // {
-        //     var order = context.Orders.Where(x => x.Name == name).FirstOrDefault();
-        //     return order;
-        // }
-
     }
 }

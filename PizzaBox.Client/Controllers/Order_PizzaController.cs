@@ -9,16 +9,16 @@ namespace PizzaBox.Client.Controller
     {
         static OrderPizzaRepository repository = Dependencies.CreateOrderPizzaRepository();
 
-        public static List<PizzaBox.Storing.Entities.OrderPizza> GetOrderPizzasByOrderID(int id)
+        public static List<PizzaBox.Domain.Models.OrderPizza> GetOrderPizzasByOrderID(int id)
         {
 
             return repository.GetAllItemsByOrderId(id);
         }
 
-        public static PizzaBox.Storing.Entities.OrderPizza addOrderPizza(int _orderID, int _pizzaID, int _quantity)
+        public static PizzaBox.Domain.Models.OrderPizza addOrderPizza(int _orderID, int _pizzaID, int _quantity)
         {
 
-            PizzaBox.Storing.Entities.OrderPizza OrderPizza = new PizzaBox.Storing.Entities.OrderPizza
+            PizzaBox.Domain.Models.OrderPizza OrderPizza = new PizzaBox.Domain.Models.OrderPizza
             {
                 OrderId = _orderID,
                 PizzaId = _pizzaID,
@@ -26,7 +26,7 @@ namespace PizzaBox.Client.Controller
             };
 
             repository.Add(OrderPizza);
-            return OrderPizza;
+            return repository.GetRecentlyAdded();
         }
 
         public static void DeleteOrderPizzaById(int id)
