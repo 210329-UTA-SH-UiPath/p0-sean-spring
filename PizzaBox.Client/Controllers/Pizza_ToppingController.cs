@@ -9,12 +9,6 @@ namespace PizzaBox.Client.Controller
     {
         static PizzaToppingRepository repository = Dependencies.CreatePizzaToppingRepository();
 
-        public static List<PizzaBox.Storing.Entities.PizzaTopping> GetPizzaToppings()
-        {
-            var PizzaToppings = repository.GetAllItems();
-            return PizzaToppings;
-        }
-
         public static List<PizzaBox.Storing.Entities.PizzaTopping> GetPizzaToppingsByPizzaID(int id)
         {
 
@@ -34,18 +28,6 @@ namespace PizzaBox.Client.Controller
 
             repository.Add(PizzaTopping);
             return PizzaTopping;
-        }
-
-        public static void UpdatePizzaToppingById()
-        {
-            Console.WriteLine("Please enter name to update");
-            string _firstName = Console.ReadLine();
-        }
-
-        public static void DeletePizzaToppingByName()
-        {
-            Console.WriteLine("Please enter name to delete");
-            var _firstName = Console.ReadLine();
         }
     }
 }

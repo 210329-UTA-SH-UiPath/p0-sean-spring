@@ -33,13 +33,5 @@ namespace PizzaBox.Client.Controller
             repository.Add(order);
             return order;
         }
-
-        public static void UpdateOrderById()
-        {
-            Console.WriteLine("Please enter name to update");
-            string _firstName = Console.ReadLine();
-        }
-
-
     }
 }

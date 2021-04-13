@@ -9,19 +9,11 @@ namespace PizzaBox.Client.Controller
     {
         static OrderPizzaRepository repository = Dependencies.CreateOrderPizzaRepository();
 
-        public static List<PizzaBox.Storing.Entities.OrderPizza> GetOrderPizzas()
-        {
-            var OrderPizzas = repository.GetAllItems();
-            return OrderPizzas;
-        }
-
         public static List<PizzaBox.Storing.Entities.OrderPizza> GetOrderPizzasByOrderID(int id)
         {
 
             return repository.GetAllItemsByOrderId(id);
         }
-
-
 
         public static PizzaBox.Storing.Entities.OrderPizza addOrderPizza(int _orderID, int _pizzaID, int _quantity)
         {
@@ -35,12 +27,6 @@ namespace PizzaBox.Client.Controller
 
             repository.Add(OrderPizza);
             return OrderPizza;
-        }
-
-        public static void UpdateOrderPizzaById()
-        {
-            Console.WriteLine("Please enter name to update");
-            string _firstName = Console.ReadLine();
         }
 
         public static void DeleteOrderPizzaById(int id)

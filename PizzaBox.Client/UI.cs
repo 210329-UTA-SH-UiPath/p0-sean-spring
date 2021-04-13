@@ -27,7 +27,7 @@ namespace PizzaBox.Client
             Console.WriteLine("Choose your user");
             Console.WriteLine($"{++index} - New Customer");
             Console.WriteLine($"{++index} - Returning Customer");
-            Console.WriteLine($"{++index} - Admin");
+            //Console.WriteLine($"{++index} - Admin");
 
 
             int input = InputInt("Select Option");

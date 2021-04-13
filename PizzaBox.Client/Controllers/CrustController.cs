@@ -20,27 +20,5 @@ namespace PizzaBox.Client.Controller
         {
             return repository.GetById(id);
         }
-
-
-        public static PizzaBox.Storing.Entities.Crust addCrust(int _CustomerId, int _StoreId, DateTime _date)
-        {
-
-            PizzaBox.Storing.Entities.Crust Crust = new PizzaBox.Storing.Entities.Crust
-            {
-            };
-
-
-            Console.WriteLine(Crust.CrustId);
-            repository.Add(Crust);
-            return Crust;
-        }
-
-        public static void UpdateCrustById()
-        {
-            Console.WriteLine("Please enter name to update");
-            string _firstName = Console.ReadLine();
-        }
-
-
     }
 }

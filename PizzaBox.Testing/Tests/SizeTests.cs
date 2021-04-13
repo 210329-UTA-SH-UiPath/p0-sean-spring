@@ -6,12 +6,12 @@ using Xunit;
 
 namespace PizzaBox.Testing.Tests
 {
-    public class StoreTests
+    public class SizeTests
     {
         [Fact]
-        public void TestGetStores()
+        public void TestGetSizes()
         {
-            var sut = StoreController.GetStores();
+            var sut = SizeController.GetSizes();
 
             bool isNull = sut == null;
 
@@ -19,9 +19,9 @@ namespace PizzaBox.Testing.Tests
         }
 
         [Fact]
-        public void TestGetStoresById()
+        public void TestGetSizesById()
         {
-            var sut = StoreController.GetStoreById(1);
+            var sut = SizeController.GetSizeById(1);
 
             bool isNull = sut == null;
 
