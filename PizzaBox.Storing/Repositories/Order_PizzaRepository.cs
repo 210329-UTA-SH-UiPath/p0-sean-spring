@@ -80,7 +80,12 @@ namespace PizzaBox.Storing.Repositories
 
         public OrderPizza GetById(int id)
         {
-            throw new NotImplementedException();
+            var OrderPizza = context.OrderPizzas.Where(x => x.OrderPizzaId == id).FirstOrDefault();
+            if (OrderPizza == null)
+            {
+                return null;
+            }
+            return mapper.Map(OrderPizza);
         }
     }
 }

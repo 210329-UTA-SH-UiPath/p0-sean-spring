@@ -13,8 +13,7 @@ namespace PizzaBox.Client
         /// </summary>
         private static void Main(string[] args)
         {
-            UI ui = new UI();
-            ui.RunUI();
+            UI.RunUI();
         }
 
     }

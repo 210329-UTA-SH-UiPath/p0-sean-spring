@@ -74,6 +74,10 @@ namespace PizzaBox.Storing.Repositories
         public Domain.Models.PizzaTopping GetById(int id)
         {
             var PizzaTopping = context.PizzaToppings.Where(x => x.PizzaToppingId == id).FirstOrDefault();
+            if (PizzaTopping == null)
+            {
+                return null;
+            }
             return mapper.Map(PizzaTopping);
         }
     }

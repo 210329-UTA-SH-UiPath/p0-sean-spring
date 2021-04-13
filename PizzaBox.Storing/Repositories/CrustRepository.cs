@@ -62,12 +62,20 @@ namespace PizzaBox.Storing.Repositories
         public Domain.Models.Crust GetByName(string name)
         {
             var Crust = context.Crusts.Where(x => x.Name == name).FirstOrDefault();
+            if (Crust == null)
+            {
+                return null;
+            }
             return mapper.Map(Crust);
         }
 
         public Domain.Models.Crust GetById(int id)
         {
             var Crust = context.Crusts.Where(x => x.CrustId == id).FirstOrDefault();
+            if (Crust == null)
+            {
+                return null;
+            }
             return mapper.Map(Crust);
         }
 

@@ -77,6 +77,10 @@ namespace PizzaBox.Storing.Repositories
         public PizzaBox.Domain.Models.Customer GetById(int id)
         {
             var Customer = context.Customers.Where(x => x.CustomerId == id).FirstOrDefault();
+            if (Customer == null)
+            {
+                return null;
+            }
             return mapper.Map(Customer);
         }
 

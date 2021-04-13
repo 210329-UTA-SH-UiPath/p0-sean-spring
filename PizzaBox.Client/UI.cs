@@ -7,20 +7,20 @@ using PizzaBox.Domain.Models;
 
 namespace PizzaBox.Client
 {
-    public class UI
+    public static class UI
     {
-        Customer customer;
-        Store store;
-        Order order;
-        Pizza custompizza;
+        static Customer _customer;
+        static Store _store;
+        static Order _order;
+        static Pizza _custompizza;
 
-        public void RunUI()
+        public static void RunUI()
         {
             Console.WriteLine("Welcome to PizzaBox!");
             SelectUserMenu();
         }
 
-        public void SelectUserMenu()
+        public static void SelectUserMenu()
         {
             int index = 0;
             Console.WriteLine("");
@@ -45,25 +45,25 @@ namespace PizzaBox.Client
             }
         }
 
-        public void NewCustomerMenu()
+        public static void NewCustomerMenu()
         {
             Console.WriteLine("");
             Console.WriteLine("Welcome to PizzaBox!");
-            customer = CustomerController.addCustomer();
+            _customer = CustomerController.addCustomer();
             OrderMenu();
         }
 
-        public void OldCustomerMenu()
+        public static void OldCustomerMenu()
         {
             Console.WriteLine("");
             Console.WriteLine("Welcome back to PizzaBox!");
-            customer = CustomerController.GetCustomerByName();
+            _customer = CustomerController.GetCustomerByName();
 
             OrderMenu();
         }
 
 
-        public void OrderMenu()
+        public static void OrderMenu()
         {
             int index = 0;
             Console.WriteLine("");
@@ -87,15 +87,15 @@ namespace PizzaBox.Client
             }
 
         }
-        public void SelectPastOrdersMenu()
+        public static void SelectPastOrdersMenu()
         {
             int index = 0;
             Console.WriteLine("");
             Console.WriteLine("Select an order to review");
-            List<Order> orders = OrderController.GetOrderByCustomerId(customer.CustomerId);
+            List<Order> orders = OrderController.GetOrderByCustomerId(_customer.CustomerId);
             foreach (var order in orders)
             {
-                Console.WriteLine($"{++index} - {customer.Name} made an Order with {StoreController.GetStoreById(order.StoreId).Name} on {order.Date}");
+                Console.WriteLine($"{++index} - {_customer.Name} made an Order with {StoreController.GetStoreById(order.StoreId).Name} on {order.Date}");
             }
             int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
 
@@ -103,7 +103,7 @@ namespace PizzaBox.Client
             ReviewPastOrder(orderid);
         }
 
-        public void ReviewPastOrder(int orderid)
+        public static void ReviewPastOrder(int orderid)
         {
             int index = 0;
             Console.WriteLine("");
@@ -127,7 +127,7 @@ namespace PizzaBox.Client
             }
         }
 
-        public void SelectStoreMenu()
+        public static void SelectStoreMenu()
         {
             int index = 0;
             Console.WriteLine("");
@@ -139,12 +139,12 @@ namespace PizzaBox.Client
             }
             int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
 
-            store = stores[--input];
-            order = OrderController.addOrder(customer.CustomerId, store.StoreId, DateTime.Now);
+            _store = stores[--input];
+            _order = OrderController.addOrder(_customer.CustomerId, _store.StoreId, DateTime.Now);
             AddPizzaMenu();
         }
 
-        public void AddPizzaMenu()
+        public static void AddPizzaMenu()
         {
             int index = 0;
             Console.WriteLine("");
@@ -160,7 +160,7 @@ namespace PizzaBox.Client
                     SelectPizzaMenu();
                     break;
                 case 2:
-                    SelectPizzaRemoveMenu(order.OrderId);
+                    SelectPizzaRemoveMenu(_order.OrderId);
                     break;
                 case 3:
                     CheckOutMenu();
@@ -169,7 +169,7 @@ namespace PizzaBox.Client
             }
         }
 
-        public void SelectPizzaRemoveMenu(int orderId)
+        public static void SelectPizzaRemoveMenu(int orderId)
         {
             int index = 0;
             List<OrderPizza> orderpizzas = OrderPizzaController.GetOrderPizzasByOrderID(orderId);
@@ -207,7 +207,7 @@ namespace PizzaBox.Client
 
         }
 
-        public void SelectPizzaMenu()
+        public static void SelectPizzaMenu()
         {
             int index = 0;
             Console.WriteLine("");
@@ -230,13 +230,13 @@ namespace PizzaBox.Client
             {
                 int Quantity = InputIntInRange("Input Quantity", 50, 1, "Please select a quantity from 1 to 50");
 
-                OrderPizzaController.addOrderPizza(order.OrderId, pizzas[--input].PizzaId, Quantity);
+                OrderPizzaController.addOrderPizza(_order.OrderId, pizzas[--input].PizzaId, Quantity);
                 Console.WriteLine($"Your pizza was added to order.");
                 AddPizzaMenu();
             }
         }
 
-        public void SelectSize()
+        public static void SelectSize()
         {
             int index = 0;
             Console.WriteLine("");
@@ -253,7 +253,7 @@ namespace PizzaBox.Client
             SelectCrust(sizeId);
         }
 
-        public void SelectCrust(int sizeId)
+        public static void SelectCrust(int sizeId)
         {
             int index = 0;
             Console.WriteLine("");
@@ -266,12 +266,12 @@ namespace PizzaBox.Client
             int input = InputIntInRange("Select Option", index, 1, "Please select a number from the store menu!");
 
             var crustId = input;
-            custompizza = PizzaController.addCustomPizza(sizeId, crustId);
+            _custompizza = PizzaController.addCustomPizza(sizeId, crustId);
 
             AddToppings();
         }
 
-        public void AddToppings()
+        public static void AddToppings()
         {
             HashSet<Topping> toppingset = new HashSet<Topping>();
             bool finished = false;
@@ -315,26 +315,26 @@ namespace PizzaBox.Client
 
             foreach (var item in toppingset)
             {
-                PizzaToppingController.addPizzaTopping(item.ToppingId, custompizza.PizzaId);
+                PizzaToppingController.addPizzaTopping(item.ToppingId, _custompizza.PizzaId);
             }
 
             int Quantity = InputIntInRange("Input Quantity", 50, 1, "Please select a quantity from 1 to 50");
 
-            OrderPizzaController.addOrderPizza(order.OrderId, custompizza.PizzaId, Quantity);
+            OrderPizzaController.addOrderPizza(_order.OrderId, _custompizza.PizzaId, Quantity);
             Console.WriteLine($"Your pizza was added to order.");
             AddPizzaMenu();
         }
 
 
-        public void CheckOutMenu()
+        public static void CheckOutMenu()
         {
             Console.WriteLine("Your order is finished!");
-            Console.WriteLine($"{customer.Name} has ordered from {store.Name} at {order.Date}");
-            ViewOrderPrice(order.OrderId);
+            Console.WriteLine($"{_customer.Name} has ordered from {_store.Name} at {_order.Date}");
+            ViewOrderPrice(_order.OrderId);
             OrderMenu();
         }
 
-        public void ViewOrderPrice(int orderId)
+        public static void ViewOrderPrice(int orderId)
         {
             List<OrderPizza> orderpizzas = OrderPizzaController.GetOrderPizzasByOrderID(orderId);
             decimal totalPrice = 0;

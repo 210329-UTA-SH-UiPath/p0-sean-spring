@@ -38,23 +38,6 @@ namespace PizzaBox.Storing.Repositories
             return mapper.Map(context.Orders.Where(x => x.OrderId == maxIndex).FirstOrDefault());
         }
 
-
-        // public void Update(Order order)
-        // {
-        //     var orderToUpdate = context.Orders.Where(x => x.OrderId == order.OrderId).FirstOrDefault();
-        //     if (orderToUpdate != null)
-        //     {
-        //         orderToUpdate.Name = Order.Name;
-        //     }
-        //     else
-        //     {
-        //         Console.WriteLine("Custormer does not exist");
-        //     }
-
-        //     context.Update(orderToUpdate);
-        //     context.SaveChanges();
-        // }
-
         List<Domain.Models.Order> IRepository<Domain.Models.Order>.GetAllItems()
         {
             var orders = context.Orders;
