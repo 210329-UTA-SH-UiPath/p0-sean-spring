@@ -5,16 +5,15 @@ using System.Collections.Generic;
 
 namespace PizzaBox.Domain.Models
 {
-    public partial class Customer
+    public partial class Store
     {
-        public Customer()
+        public Store()
         {
             Orders = new HashSet<Order>();
         }
 
-        public int CustomerId { get; set; }
+        public int StoreId { get; set; }
         public string Name { get; set; }
-        public byte[] Address { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }

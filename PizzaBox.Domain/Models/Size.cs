@@ -1,26 +1,21 @@
-using PizzaBox.Domain.Abstracts;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable disable
 
 namespace PizzaBox.Domain.Models
 {
-    public class Size : AComponent
+    public partial class Size
     {
-
-        public void SmallSize()
+        public Size()
         {
-            Name = "Small";
-            Price = 3;
+            Pizzas = new HashSet<Pizza>();
         }
 
-        public void MediumSize()
-        {
-            Name = "Medium";
-            Price = 5;
-        }
+        public int SizeId { get; set; }
+        public string Name { get; set; }
+        public decimal Price { get; set; }
 
-        public void LargeSize()
-        {
-            Name = "LargeSize";
-            Price = 9;
-        }
+        public virtual ICollection<Pizza> Pizzas { get; set; }
     }
 }

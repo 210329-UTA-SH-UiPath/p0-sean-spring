@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Xml.Serialization;
 using PizzaBox.Domain.Models;
+using System;
 
 namespace PizzaBox.Domain.Abstracts
 {
@@ -8,18 +9,41 @@ namespace PizzaBox.Domain.Abstracts
     ///  Represents the pizza abstract class
     /// </summary>
 
-    [XmlInclude(typeof(PepperoniPizza))]
-    [XmlInclude(typeof(VeganPizza))]
     public abstract class APizza
     {
+        private double _price;
 
+        private List<Topping> _toppings;
+
+        public string Name { get; set; }
         public Crust Crust { get; set; }
 
         public Size Size { get; set; }
 
-        public List<Topping> toppings { get; set; }
-
-        public double Price { get; set; }
+        public List<Topping> toppings
+        {
+            get
+            {
+                return _toppings;
+            }
+            set
+            {
+                if (value.Count < 2)
+                {
+                    Console.WriteLine("Pizza has too little toppings. Please put more than two.");
+                    _toppings = null;
+                }
+                else if (value.Count > 5)
+                {
+                    Console.WriteLine("Pizza has too many topping. Please put less than five.");
+                    _toppings = null;
+                }
+                else
+                {
+                    _toppings = value;
+                }
+            }
+        }
 
         protected APizza()
         {
@@ -28,7 +52,7 @@ namespace PizzaBox.Domain.Abstracts
 
         private void Factory()
         {
-            toppings = new List<Topping>();
+
 
             AddCrust();
             AddSize();
@@ -46,6 +70,12 @@ namespace PizzaBox.Domain.Abstracts
         }
 
         public abstract void AddToppings();
+
+
+        public virtual void AddName()
+        {
+            Name = null;
+        }
 
 
     }

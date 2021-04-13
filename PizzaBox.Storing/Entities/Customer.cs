@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PizzaBox.Domain.Models
+namespace PizzaBox.Storing.Entities
 {
     public partial class Customer
     {

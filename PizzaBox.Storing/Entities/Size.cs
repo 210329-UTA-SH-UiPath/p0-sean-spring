@@ -3,16 +3,16 @@ using System.Collections.Generic;
 
 #nullable disable
 
-namespace PizzaBox.Domain.Models
+namespace PizzaBox.Storing.Entities
 {
-    public partial class Crust
+    public partial class Size
     {
-        public Crust()
+        public Size()
         {
             Pizzas = new HashSet<Pizza>();
         }
 
-        public int CrustId { get; set; }
+        public int SizeId { get; set; }
         public string Name { get; set; }
         public decimal Price { get; set; }
 
