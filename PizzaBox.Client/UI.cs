@@ -45,6 +45,16 @@ namespace PizzaBox.Client
             }
         }
 
+
+        public static void AdminMainMenu()
+        {
+            int index = 0;
+            Console.WriteLine("");
+            Console.WriteLine("Choose your user");
+            Console.WriteLine($"{++index} - New Customer");
+            Console.WriteLine($"{++index} - Returning Customer");
+        }
+
         public static void NewCustomerMenu()
         {
             Console.WriteLine("");
@@ -286,6 +296,7 @@ namespace PizzaBox.Client
 
             do
             {
+                Console.WriteLine("");
                 Console.WriteLine("Select your toppings (at least two, no more than five)");
 
                 int input = InputIntInRange("Select Topping", index, 1, "Please select a number from the store menu!");
@@ -304,10 +315,12 @@ namespace PizzaBox.Client
                 {
                     if (toppingset.Add(toppings[--input]))
                     {
+                        Console.WriteLine("");
                         Console.WriteLine($"Topping was added.");
                     }
                     else
                     {
+                        Console.WriteLine("");
                         Console.WriteLine($"Topping was already added. Pick another topping.");
                     }
                 }
